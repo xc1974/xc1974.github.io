@@ -293,6 +293,96 @@
             border-radius: 3px;
         }
 
+        /* 距離圓圈樣式 */
+        .distance-circle {
+            transition: all 0.3s ease;
+        }
+
+        .distance-circle:hover {
+            stroke-width: 3px !important;
+            fill-opacity: 0.2 !important;
+        }
+
+        /* 圓圈標籤樣式 */
+        .circle-label {
+            background: none !important;
+            border: none !important;
+        }
+
+        .label-text {
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .label-400km {
+            background: rgba(0, 255, 136, 0.9) !important;
+            color: #000000;
+        }
+
+        .label-800km {
+            background: rgba(255, 107, 53, 0.9) !important;
+            color: #ffffff;
+        }
+
+        /* 香港中心標記樣式 */
+        .hk-center-marker {
+            background: none !important;
+            border: none !important;
+        }
+
+        .hk-center {
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            border: 2px solid #ffffff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(255, 71, 87, 0.8);
+            }
+            100% {
+                box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            }
+        }
+
+        /* 彈窗樣式 */
+        .circle-popup {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            text-align: center;
+        }
+
+        .circle-popup strong {
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .hk-popup {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            text-align: center;
+        }
+
+        .hk-popup strong {
+            color: #e74c3c;
+            font-size: 16px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
