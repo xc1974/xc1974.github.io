@@ -1,188 +1,38 @@
-# 台风路径预测系统
+# xc11 — X Series portfolio
 
-一个类似Zoom.Earth的台风路径预测和可视化系统，专门针对香港及周边地区设计，集成了多个气象数据源。
+A responsive personal website for xc11, introducing X Series (established in 2016) and its four chapters:
 
-## 🌪️ 功能特点
+- **XC-V:** the Minecraft Bedrock server project that did not launch because of the pandemic.
+- **XC-X:** music, including light music, future house and house, with YouTube and NetEase Cloud Music links.
+- **XC-XV:** the LKKC backstage team and interclass performing arts competitions in 2023–2024 and 2024–2025. X-12 Series is a backstage sub-series; XC-XV Hub is permanently closed.
+- **XC-XVI:** a new collaboration project series, with an announcement and leader recruitment planned for early November 2026.
 
-- **现代化界面设计**: 采用深色主题和未来主义风格，提供专业的气象数据可视化体验
-- **多数据源支持**: 集成香港天文台、中国气象局、日本气象厅等多个权威气象机构数据
-- **实时路径追踪**: 显示台风的实时位置和历史路径，支持动态更新
-- **预测路径**: 显示未来48小时的台风预测路径，多数据源对比分析
-- **交互式地图**: 基于Leaflet的交互式地图，支持缩放、平移等操作
-- **多图层支持**: 标准地图、卫星图像、地形图等多种地图样式
-- **台风影响范围**: 显示不同风速等级的影响范围圆圈，动态视觉效果
-- **强度等级过滤**: 可按台风强度等级过滤显示，交互式选择器
-- **专业统计信息**: 显示台风移动速度、气压变化等详细数据
-- **现代化动画**: 流畅的过渡动画和视觉效果，提升用户体验
-- **多语言支持**: 支持中文界面，国际化设计
-- **自动更新**: 每5分钟自动刷新数据，实时监控
-- **响应式设计**: 适配不同屏幕尺寸，移动端友好
-- **智能缩放**: 根据缩放级别自动调整风力圈显示
+## Website files
 
-## 🚀 快速开始
+`index.html` is the complete portfolio. It contains the page, styles and project introduction panels, with no build step or installed dependencies. The visual direction combines a personal record sleeve and stage cue sheets: asymmetric chapter rows, geometric paper grids and a vermilion accent. Bricolage Grotesque, Fraunces, IBM Plex Mono and Noto Serif TC are loaded from Google Fonts. The page entrance is a single staggered CSS sequence, with a reduced-motion alternative.
 
-### 方法一：GitHub Pages 在线访问（推荐）
-🌐 **直接访问**: [https://your-username.github.io/typhoon-tracker/](https://your-username.github.io/typhoon-tracker/)
+`typhoon.html` preserves the previous homepage. Its original `app.js` is included. The tracker retains its original external data and library dependencies; its live weather feeds have not been revalidated.
 
-### 方法二：本地开发（使用代理服务器）
-1. 确保已安装 Node.js (版本 14+)
-2. 下载所有文件到本地目录
-3. 运行启动脚本：
-   - Windows: 双击 `start.bat`
-   - Linux/Mac: 运行 `npm install && npm start`
-4. 在浏览器中访问 `http://localhost:3000`
+GitHub Pages serves these files from the root of the publishing branch. The existing tracker assets remain in place. Its original documentation is preserved in [TYPHOON_README.md](TYPHOON_README.md).
 
-### 方法三：直接打开（仅模拟数据）
-1. 用现代浏览器打开 `index.html` 文件
-2. 系统将显示模拟台风数据
+## Editing the content
 
-### 方法四：部署到自己的 GitHub Pages
-详细步骤请参考 [GitHub Pages 部署指南](GITHUB_DEPLOY.md)
+Update the visible section text in `index.html`. The `projects` object near the end controls the extended introductions that open from each chapter.
 
-## 📁 文件结构
+The current enquiry address is **s1401121@gmail.com**. Search the file for that address to update every contact link when the new address is ready. The XC-XVI application form is not available yet; the website labels recruitment as upcoming and uses email for early enquiries.
 
-```
-typhoon-checker/
-├── index.html          # 主页面
-├── app.js             # 主应用逻辑
-├── config.js          # 配置文件
-├── api-service.js     # API服务模块
-├── server.js          # 代理服务器
-├── package.json       # Node.js依赖配置
-├── start.bat          # Windows启动脚本
-└── README.md          # 说明文档
-```
+When the application link is ready, update both the XC-XVI recruitment paragraph and the `xc-xvi` entry in `projects`. Replace the planned announcement wording only after the announcement is made.
 
-## 🔧 配置说明
+## Original work and links
 
-### API配置
-在 `config.js` 中可以配置各个气象API的参数：
+- [YouTube](https://www.youtube.com/@xc11_)
+- [NetEase Cloud Music](https://music.163.com/#/artist?id=52737043)
+- [X-12 Series](https://github.com/xc1974/X-12-Series)
+- [Former XC-XV Hub repository](https://github.com/xc1974/xc-xv_events)
 
-```javascript
-apis: {
-    hko: {
-        name: '香港天文台',
-        baseUrl: 'https://www.weather.gov.hk',
-        enabled: true,
-        color: '#e74c3c'
-    },
-    // ... 其他API配置
-}
-```
+The chapter graphics are original abstract identity artwork, not screenshots of the projects. The featured uploads link to the existing YouTube videos and are identified as channel uploads, remixes or Black MIDI content.
 
-### 地图配置
-可以调整地图的中心点、缩放级别等：
+## Verification
 
-```javascript
-map: {
-    center: [22.3193, 114.1694], // 香港坐标
-    zoom: 8,
-    minZoom: 6,
-    maxZoom: 18
-}
-```
+The page was checked in a browser at desktop and 390-pixel phone widths. Navigation, the mobile menu, all four introduction panels, Escape dismissal, the contact destinations and internal links were checked. The original tracker is retained without changing its application logic.
 
-## 🌐 数据源
-
-### 香港天文台 (HKO) - 官方API集成
-- **官网**: https://www.weather.gov.hk
-- **API端点**: https://data.weather.gov.hk/weatherAPI/opendata/
-- **数据格式**: JSON格式的实时天气数据
-- **更新频率**: 实时更新
-- **功能**: 热带气旋警告、9天天气预报、当前天气报告
-
-### 中国气象局 (CMA) - 台风数据中心
-- **官网**: https://tcdata.typhoon.org.cn
-- **API端点**: https://tcdata.typhoon.org.cn/api/typhoon/list
-- **数据格式**: 标准化的台风数据
-- **更新频率**: 每6小时
-- **功能**: 台风路径、强度、卫星观测数据
-
-### 日本气象厅 (JMA) - 台风信息
-- **官网**: https://www.jma.go.jp
-- **API端点**: https://www.jma.go.jp/bosai/typhoon/data/typhoon.json
-- **数据格式**: JSON格式的台风数据
-- **更新频率**: 每6小时
-- **功能**: 台风路径预测、强度分析
-
-### 代理服务器
-- **功能**: 解决CORS跨域问题
-- **端口**: 3000
-- **API路由**: `/api/hko/*`, `/api/cma/*`, `/api/jma/*`
-
-## 🎨 界面说明
-
-### 侧边栏控制面板
-- **数据源选择**: 可以选择单个数据源或全部数据源
-- **刷新按钮**: 手动刷新台风数据
-- **清除按钮**: 清除地图上的所有路径
-- **台风信息**: 显示当前台风的详细信息
-
-### 地图功能
-- **路径显示**: 不同颜色表示不同数据源的预测
-- **标记点**: 显示台风在不同时间的位置
-- **弹窗信息**: 点击标记查看详细信息
-- **图例**: 说明不同颜色代表的含义
-
-## 🔄 数据更新
-
-系统支持以下更新方式：
-- **自动更新**: 每5分钟自动刷新数据
-- **手动更新**: 点击刷新按钮立即更新
-- **缓存机制**: 避免频繁请求，提高性能
-
-## 🛠️ 技术栈
-
-- **前端框架**: 原生JavaScript (ES6+)
-- **地图库**: Leaflet.js
-- **样式**: CSS3 + 响应式设计
-- **数据格式**: JSON
-- **API**: RESTful API
-
-## 📱 浏览器支持
-
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-
-## 🔒 注意事项
-
-1. **CORS限制**: 由于浏览器的CORS政策，某些API可能需要后端代理
-2. **数据准确性**: 本系统使用模拟数据进行演示，实际部署时需要连接真实API
-3. **网络要求**: 需要稳定的网络连接以获取实时数据
-
-## 🚀 部署建议
-
-### 生产环境部署
-1. 配置真实的气象API接口
-2. 设置后端代理服务处理CORS问题
-3. 配置CDN加速静态资源
-4. 设置监控和日志系统
-
-### 开发环境
-1. 使用本地服务器运行
-2. 配置开发工具进行调试
-3. 使用版本控制管理代码
-
-## 📞 技术支持
-
-如有问题或建议，请通过以下方式联系：
-- 创建Issue提交问题
-- 发送邮件反馈
-- 参与讨论交流
-
-## 📄 许可证
-
-本项目采用MIT许可证，详见LICENSE文件。
-
-## 🙏 致谢
-
-感谢以下开源项目和服务：
-- Leaflet.js - 开源地图库
-- OpenStreetMap - 地图数据
-- 各大气象机构 - 提供权威数据
-
----
-
-**注意**: 本系统仅用于学习和演示目的，实际台风预警请以官方气象部门发布的信息为准。
