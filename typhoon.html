@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颱風預測路徑 - 香港天文台實時數據</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- JSZip for ZIP file extraction -->
+    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #0099cc, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .warning-signals {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .signal-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .signal-item.active {
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            border-color: #ff4757;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .signal-number {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 380px;
+            background: rgba(15, 15, 35, 0.85);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .typhoon-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .path-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .path-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .path-label {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .path-value {
+            color: #e2e8f0;
+        }
+
+        .controls {
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00b8e6, #0088bb);
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .legend {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .typhoon-marker {
+            font-size: 24px;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+            animation: typhoon-pulse 2s infinite;
+        }
+
+        @keyframes typhoon-pulse {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .wind-circle {
+            stroke: #00d4ff;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 5, 5;
+            opacity: 0.6;
+        }
+
+        .forecast-path {
+            stroke: #ff6b35;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 10, 5;
+            opacity: 0.8;
+        }
+
+        .historical-path {
+            stroke: #00d4ff;
+            stroke-width: 3;
+            fill: none;
+            opacity: 0.8;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        /* 距離圓圈樣式 */
+        .distance-circle {
+            transition: all 0.3s ease;
+        }
+
+        .distance-circle:hover {
+            stroke-width: 3px !important;
+            fill-opacity: 0.2 !important;
+        }
+
+        /* 圓圈標籤樣式 */
+        .circle-label {
+            background: none !important;
+            border: none !important;
+        }
+
+        .label-text {
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .label-400km {
+            background: rgba(0, 255, 136, 0.9) !important;
+            color: #000000;
+        }
+
+        .label-800km {
+            background: rgba(255, 107, 53, 0.9) !important;
+            color: #ffffff;
+        }
+
+        /* 香港中心標記樣式 */
+        .hk-center-marker {
+            background: none !important;
+            border: none !important;
+        }
+
+        .hk-center {
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            border: 2px solid #ffffff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(255, 71, 87, 0.8);
+            }
+            100% {
+                box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            }
+        }
+
+        /* 彈窗樣式 */
+        .circle-popup {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            text-align: center;
+        }
+
+        .circle-popup strong {
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .hk-popup {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            text-align: center;
+        }
+
+        .hk-popup strong {
+            color: #e74c3c;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 40vh;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .warning-signals {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span style="font-size: 28px;">🌪️</span>
+                <h1>颱風預測路徑</h1>
+            </div>
+            <div class="warning-signals" id="warningSignals">
+                <div class="signal-item">
+                    <span class="signal-number">1</span>
+                    <span>一號風球</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-number">3</span>
+                    <span>三號風球</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-number">8</span>
+                    <span>八號風球</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-number">9</span>
+                    <span>九號風球</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-number">10</span>
+                    <span>十號風球</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="controls">
+                <button class="btn btn-primary" id="refreshBtn">🔄 刷新數據</button>
+            </div>
+
+            <div class="typhoon-info" id="typhoonInfo" style="display: none;">
+                <h3 class="section-title">🌪️ 颱風資訊</h3>
+                <div class="info-grid" id="typhoonGrid"></div>
+                <div class="path-info">
+                    <h4 style="color: #00d4ff; margin-bottom: 12px; font-size: 14px;">路徑資訊</h4>
+                    <div id="pathDetails"></div>
+                </div>
+            </div>
+
+            <div class="loading" id="loadingIndicator" style="display: none;">
+                <div class="spinner"></div>
+                <div>正在獲取颱風數據...</div>
+            </div>
+
+        <div class="legend">
+            <h4 class="section-title">圖例說明</h4>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00d4ff;"></div>
+                <span>歷史路徑</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff6b35;"></div>
+                <span>預測路徑</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00ff88;"></div>
+                <span>風力圈</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00ff88; border: 2px dashed #00ff88;"></div>
+                <span>400km範圍</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff6b35; border: 2px dashed #ff6b35;"></div>
+                <span>800km範圍</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #95a5a6;"></div>
+                <span>熱帶低氣壓</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f39c12;"></div>
+                <span>熱帶風暴</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e67e22;"></div>
+                <span>強烈熱帶風暴</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e74c3c;"></div>
+                <span>颱風</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #c0392b;"></div>
+                <span>強颱風</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #8e44ad;"></div>
+                <span>超強颱風</span>
+            </div>
+        </div>
+        </div>
+
+        <div class="main-content">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
