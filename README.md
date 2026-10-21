@@ -9,7 +9,7 @@ A responsive personal website for xc11, introducing X Series (established in 201
 
 ## Website files
 
-`index.html` is the complete portfolio. It contains the page, styles and project introduction panels, with no build step or installed dependencies.
+`index.html` is the complete portfolio. It contains the page, styles and project introduction panels, with no build step or installed dependencies. The visual direction combines a personal record sleeve and stage cue sheets: asymmetric chapter rows, geometric paper grids and a vermilion accent. Bricolage Grotesque, Fraunces, IBM Plex Mono and Noto Serif TC are loaded from Google Fonts. The page entrance is a single staggered CSS sequence, with a reduced-motion alternative.
 
 `typhoon.html` preserves the previous homepage. Its original `app.js` is included. The tracker retains its original external data and library dependencies; its live weather feeds have not been revalidated.
 
