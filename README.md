@@ -1,38 +1,38 @@
-# xc11 — X Series portfolio
+# xc11 — X Series
+A bilingual personal website for xc11: music, backstage work and the next collaborative project.
 
-A responsive personal website for xc11, introducing X Series (established in 2016) and its four chapters:
+Live site: https://xc1974.github.io/
 
-- **XC-V:** the Minecraft Bedrock server project that did not launch because of the pandemic.
-- **XC-X:** music, including light music, future house and house, with YouTube and NetEase Cloud Music links.
-- **XC-XV:** the LKKC backstage team and interclass performing arts competitions in 2023–2024 and 2024–2025. X-12 Series is a backstage sub-series; XC-XV Hub is permanently closed.
-- **XC-XVI:** a new collaboration project series, with an announcement and leader recruitment planned for early November 2026.
+## Run locally
+No build step or frontend dependencies are needed. Serve the publishing directory with any static server, for example:
 
-## Website files
+    python -m http.server 4175
 
-`index.html` is the complete portfolio. It contains the page, styles and project introduction panels, with no build step or installed dependencies. The visual direction combines a personal record sleeve and stage cue sheets: asymmetric chapter rows, geometric paper grids and a vermilion accent. Bricolage Grotesque, Fraunces, IBM Plex Mono and Noto Serif TC are loaded from Google Fonts. The page entrance is a single staggered CSS sequence, with a reduced-motion alternative.
+Open http://127.0.0.1:4175/ while the server is running. GitHub Pages serves the same directory.
 
-`typhoon.html` preserves the previous homepage. Its original `app.js` is included. The tracker retains its original external data and library dependencies; its live weather feeds have not been revalidated.
+## Files
+- index.html — content and accessible native HTML structure
+- site.css — responsive layout, design tokens and CSS motion
+- site.js — Chinese/English preference, mobile menu dismissal and email copy feedback
+- assets/ — the owner's supplied music image and an abstract backstage illustration, self-hosted fonts and licences
+- typhoon.html — previous homepage, retained with its original application files
+- DESIGN.md — design references, decisions and verification notes
 
-GitHub Pages serves these files from the root of the publishing branch. The existing tracker assets remain in place. Its original documentation is preserved in [TYPHOON_README.md](TYPHOON_README.md).
+## Content
+X Series began in 2016 and contains XC-V, XC-X, XC-XV and XC-XVI. XC-XVI's announcement and leader recruitment are planned for early November 2026; the application link is not ready. XC-XV Hub is permanently closed, and X-12 Series is a backstage sub-series within XC-XV.
 
-## Editing the content
+Chinese text is authored directly in index.html. The corresponding English text is in each data-en attribute. Accessibility labels and image descriptions have data-en-aria-label and data-en-alt translations. The default language is Traditional Chinese. A saved preference or ?lang=en can select English.
 
-Update the visible section text in `index.html`. The `projects` object near the end controls the extended introductions that open from each chapter.
+The current public contact address is s1401121@gmail.com. Update every occurrence in index.html and site.js when it changes. When recruitment opens, update both languages, the early-November wording and the enquiry link together; there is currently no application form.
 
-The current enquiry address is **s1401121@gmail.com**. Search the file for that address to update every contact link when the new address is ready. The XC-XVI application form is not available yet; the website labels recruitment as upcoming and uses email for early enquiries.
+Fonts are subsetted to the current copy. If new characters are added, regenerate the subsets with tools/subset-fonts.py and the original open-source font files; see that script's help. Font licences are included in assets/FONT-LICENSES.txt.
 
-When the application link is ready, update both the XC-XVI recruitment paragraph and the `xc-xvi` entry in `projects`. Replace the planned announcement wording only after the announcement is made.
-
-## Original work and links
-
+## Existing projects
 - [YouTube](https://www.youtube.com/@xc11_)
 - [NetEase Cloud Music](https://music.163.com/#/artist?id=52737043)
-- [X-12 Series](https://github.com/xc1974/X-12-Series)
-- [Former XC-XV Hub repository](https://github.com/xc1974/xc-xv_events)
 
-The chapter graphics are original abstract identity artwork, not screenshots of the projects. The featured uploads link to the existing YouTube videos and are identified as channel uploads, remixes or Black MIDI content.
+Featured uploads are labelled as channel uploads, remixes or Black MIDI, rather than claiming other artists' tracks as originals.
 
-## Verification
+The typhoon tracker keeps its original app.js, config.js and api-service.js. Its external weather feeds have not been revalidated. The original documentation is in TYPHOON_README.md.
 
-The page was checked in a browser at desktop and 390-pixel phone widths. Navigation, the mobile menu, all four introduction panels, Escape dismissal, the contact destinations and internal links were checked. The original tracker is retained without changing its application logic.
-
+Privacy: no school name, identifiable school photograph, or direct school-project repository links are published in the portfolio. Backstage experience is described in general terms. Historical Git commits and external profiles are outside the scope of this page.
