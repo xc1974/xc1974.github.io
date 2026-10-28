@@ -1,32 +1,17 @@
-# Design and interaction notes
-## References
-This redesign applies the task-scoped guidance from [Emil Kowalski's skills](https://github.com/emilkowalski/skills), specifically:
-- [emil-design-eng](https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md)
-- [animate](https://github.com/emilkowalski/skills/blob/main/skills/animate/SKILL.md)
-- [mobile-native](https://github.com/emilkowalski/skills/blob/main/skills/mobile-native/SKILL.md)
+# Design and verification
+The site keeps the off-white/cobalt identity and original music image from the previous redesign. It follows Emil Kowalski's [design engineering](https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md), [animation](https://github.com/emilkowalski/skills/blob/main/skills/animate/SKILL.md) and [mobile](https://github.com/emilkowalski/skills/blob/main/skills/mobile-native/SKILL.md) principles.
 
-The skills were read as design references, not installed globally. No component library is needed for this static page: native links, buttons and details elements cover its interactions.
+The portfolio is English-only. The language control, translation attributes and translation script are removed. The new Events section introduces 2026 End Mix without inventing dates or a lineup. Main navigation links to Events and the application entry.
 
-## Direction
-An off-white and cobalt creator portfolio, with an asymmetric introduction and the owner's music image and an abstract live-production illustration. A small voxel illustration represents the unlaunched Minecraft project; it is not a screenshot. Contiguous chapter links give way to distinct music, backstage and collaboration sections, rather than repeating a generic card grid.
+Native HTML links, buttons and details remain keyboard accessible. Entrance motion is transform/opacity only, once on page load, with a reduced-motion fade. Pointer hover is capability-gated and keyboard interaction disables transitions. The mobile menu closes on link activation or Escape.
 
-Bricolage Grotesque, Noto Sans TC, Noto Serif TC and IBM Plex Mono are self-hosted as subsetted WOFF2. Font family names inside the modified files have been changed to XC11 names. The original licences and credits remain in assets/FONT-LICENSES.txt.
+## Application service
+The matching application page is plain server-rendered HTML with native validation and form submission. Name, email and Discord username are required; school / university is optional. The input font is 16px to avoid phone focus zoom. The form is responsive and respects safe areas.
 
-## Motion and input
-- A single 300ms page entrance, staggered by 50ms. No ongoing decorative animation or scroll interception.
-- Transform/opacity entrance; no transition: all or animated layout properties.
-- Menu and detail reveal under 200ms; frequent actions stay immediate.
-- Buttons compress to 0.97 on pointer activation.
-- Hover effects require a fine pointer and hover support.
-- Keyboard input disables transitions and animation, and removes entrance classes so pointer input cannot replay them.
-- Reduced-motion CSS uses a short opacity fade without positional movement.
-- Native details supply disclosure semantics and normal keyboard behaviour; Escape closes the mobile menu and restores summary focus.
-- 44px minimum button/link targets for compact controls, zoom remains enabled, safe-area header/footer insets, and an accessible live status for email copying.
-- All primary content and links work without JavaScript. The optional language/copy controls only appear when JavaScript runs.
+The Vercel Node.js service validates origin, CSRF, payload size, honeypot and field values on the server. A unique submission key prevents duplicate records on retries. Success requires a confirmed private Blob record; the receipt contains a reference, not applicant details. Both invitation and open-application paths are supported. Invitation context is not treated as an access credential or approval.
 
-## Verification
-The local page was exercised in the in-app browser at 1440px desktop, 390px phone and 320px narrow-phone viewport widths in both languages. Checks covered horizontal overflow, actual image loading, language switching and reload persistence, mobile menu navigation/dismissal, Escape focus behaviour, XC-XV disclosure, contact targets and successful clipboard feedback. Browser warnings/errors were empty during these flows.
+Verification includes production builds and TypeScript checks; local browser submission with an empty school field; local API checks for invalid CSRF/origin, honeypot, size bounds, escaped validation feedback, idempotency, receipt access and rate limiting. Local Miniflare occasionally restarted during test requests; the API test client retries that exact development-only response once using the same submission key. It does not retry application errors or alter production behaviour.
 
-JavaScript syntax, unique IDs, internal anchors, local asset references, font glyph coverage for authored text, and unchanged tracker files were checked separately. Reduced-motion rules are implemented and source-checked; physical phones, device safe areas, touch hardware and OS reduced-motion behaviour have not been tested on hardware.
+Desktop and phone viewport checks are performed in the in-app browser. No physical phone hardware is used. Original tracker application files are preserved.
 
-Privacy: no school name, identifiable school photograph, or direct school-project repository links are published in the portfolio. Backstage experience is described in general terms. Historical Git commits and external profiles are outside the scope of this page.
+The final public application host is Vercel. Only the separate form is deployed there; the main portfolio remains on GitHub Pages. The Vercel form stores private JSON records in a private Blob store, with server-only storage credentials. The earlier Sites preview is not linked from the portfolio.
