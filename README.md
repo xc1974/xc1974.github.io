@@ -1,38 +1,37 @@
 # xc11 — X Series
-A bilingual personal website for xc11: music, backstage work and the next collaborative project.
+An English-only portfolio for xc11: music, backstage work and projects made together.
+Live website: https://xc1974.github.io/
 
-Live site: https://xc1974.github.io/
-
-## Run locally
-No build step or frontend dependencies are needed. Serve the publishing directory with any static server, for example:
+## Website
+No build step or frontend dependencies are needed. Serve this directory with any static server:
 
     python -m http.server 4175
 
-Open http://127.0.0.1:4175/ while the server is running. GitHub Pages serves the same directory.
+index.html contains the portfolio and Events section. site.css contains responsive styling and CSS motion. site.js handles native menu dismissal and email copying. There is no locale toggle, saved language preference or Chinese copy.
 
-## Files
-- index.html — content and accessible native HTML structure
-- site.css — responsive layout, design tokens and CSS motion
-- site.js — Chinese/English preference, mobile menu dismissal and email copy feedback
-- assets/ — the owner's supplied music image and an abstract backstage illustration, self-hosted fonts and licences
-- typhoon.html — previous homepage, retained with its original application files
-- DESIGN.md — design references, decisions and verification notes
+XC-XVI supports both invitations and open applications. Its first event is **2026 End Mix**. Full event details and dates are still to be announced; the full series announcement remains planned for early November 2026.
 
-## Content
-X Series began in 2016 and contains XC-V, XC-X, XC-XV and XC-XVI. XC-XVI's announcement and leader recruitment are planned for early November 2026; the application link is not ready. XC-XV Hub is permanently closed, and X-12 Series is a backstage sub-series within XC-XV.
+## Applications
+The public entry is https://xc1974.github.io/apply.html.
+apply.html and apply-redirect.js forward visitors to the published XC-XVI application service. Only the known invitation/event context is forwarded; applicant data is never placed in a GitHub Pages URL or stored in this repository.
 
-Chinese text is authored directly in index.html. The corresponding English text is in each data-en attribute. Accessibility labels and image descriptions have data-en-aria-label and data-en-alt translations. The default language is Traditional Chinese. A saved preference or ?lang=en can select English.
+The separate Vercel application accepts:
+- Name — required
+- School / university — optional
+- Email — required
+- Discord username — required
 
-The current public contact address is s1401121@gmail.com. Update every occurrence in index.html and site.js when it changes. When recruitment opens, update both languages, the early-November wording and the enquiry link together; there is currently no application form.
+Both invited and open applicants use the same form. Invitation context is self-reported and does not grant automatic acceptance. A receipt is shown only after the record is saved. Records stay in a private Vercel Blob store; there is no public applicant directory or export.
 
-Fonts are subsetted to the current copy. If new characters are added, regenerate the subsets with tools/subset-fonts.py and the original open-source font files; see that script's help. Font licences are included in assets/FONT-LICENSES.txt.
+The application service has no email notification integration. Review records in the project's private Blob store in the Vercel dashboard. The application source and schema are maintained in the separate Vercel project, not in GitHub Pages.
 
-## Existing projects
-- [YouTube](https://www.youtube.com/@xc11_)
-- [NetEase Cloud Music](https://music.163.com/#/artist?id=52737043)
+## Maintenance
+The current public enquiry address is s1401121@gmail.com. Update its occurrences in index.html, site.js and the separate application project when it changes.
 
-Featured uploads are labelled as channel uploads, remixes or Black MIDI, rather than claiming other artists' tracks as originals.
+Fonts are self-hosted Bricolage Grotesque and IBM Plex Mono. The files are subsetted; tools/subset-fonts.py can regenerate them. Keep assets/FONT-LICENSES.txt.
 
-The typhoon tracker keeps its original app.js, config.js and api-service.js. Its external weather feeds have not been revalidated. The original documentation is in TYPHOON_README.md.
+School names, identifiable school photographs and direct school-project repository links remain removed from the portfolio. The music image is supplied by the owner. Backstage visuals are abstract code-based illustrations.
 
-Privacy: no school name, identifiable school photograph, or direct school-project repository links are published in the portfolio. Backstage experience is described in general terms. Historical Git commits and external profiles are outside the scope of this page.
+The original typhoon tracker remains at typhoon.html with its unchanged original application files. It is a separate archived app and is no longer linked from the portfolio. Its live weather feeds have not been revalidated. Original documentation is retained in TYPHOON_README.md.
+
+Application service: https://xc-xvi-apply.vercel.app/
